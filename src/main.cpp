@@ -3,6 +3,8 @@
 #include <Ethernet.h>
 #include <EthernetUdp.h>
 
+#define RETURN_BUFFER 256
+
 //network configuration info for remote device
 byte mac[] = {0xA8, 0x61, 0x0A, 0xAE, 0x7E, 0x3A}; //Set device mac address from hardware
 IPAddress ip(192,168,11,2); //Set device IP address 
@@ -11,10 +13,10 @@ unsigned int returnPort = 8888; //Set port udp will return on
 
 //Set up send and receive buffers
 char netInBuffer[UDP_TX_PACKET_MAX_SIZE];
-char outputBuffer[UDP_TX_PACKET_MAX_SIZE];
+char outputBuffer[RETURN_BUFFER];
 
 EthernetUDP Udp; //udp handler
-IPAddress returnIP; //updated each packet received, this is where udp packets of serial data will be sent
+IPAddress returnIP(192,168,11,1); //updated each packet received, this is where udp packets of serial data will be sent
 uint8_t writeOut = 0; //Flag to send packetBuffer
 uint8_t i = 0; //buffer index counter
 
@@ -24,6 +26,9 @@ void setup()
   Ethernet.begin(mac,ip);
   Udp.begin(localPort);
   Serial.begin(115200);
+  Udp.beginPacket(returnIP, returnPort);
+  Udp.write("On...");
+  Udp.endPacket();
 }
 
 void loop() 
@@ -42,7 +47,7 @@ void loop()
   {
     char in = Serial.read();
     outputBuffer[i++] = in;
-    if(in == '\r' || i >= UDP_TX_PACKET_MAX_SIZE)
+    if(in == '>' || i >= RETURN_BUFFER)
     {
       writeOut = 1; //Set flag to send udp packet on newline or max packet size
     }
