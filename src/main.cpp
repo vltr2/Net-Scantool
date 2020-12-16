@@ -26,9 +26,6 @@ void setup()
   Ethernet.begin(mac,ip);
   Udp.begin(localPort);
   Serial.begin(115200);
-  Udp.beginPacket(returnIP, returnPort);
-  Udp.write("On...");
-  Udp.endPacket();
 }
 
 void loop() 
