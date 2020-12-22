@@ -7,7 +7,7 @@
 
 //network configuration info for remote device
 byte mac[] = {0xA8, 0x61, 0x0A, 0xAE, 0x7E, 0x3A}; //Set device mac address from hardware
-IPAddress ip(192,168,11,2); //Set device IP address 
+IPAddress ip(192,168,200,117); //Set device IP address 
 unsigned int localPort = 8888; //Set port to listen for commands on
 unsigned int returnPort = 8888; //Set port udp will return on
 
